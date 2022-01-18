@@ -17,37 +17,34 @@ public class ZipFileTest {
 
     @Test
     void ZipTest() throws Exception {
-        ZipFile zipFile = new ZipFile("src/test/resources/files.zip");
+        ZipFile zipFile = new ZipFile("src/test/resources/ZipTestArchive.zip");
 
-        // Проверяем xls файл в архиве
-        ZipEntry XlsEntry = zipFile.getEntry("clients.xlsx");
+        ZipEntry XlsEntry = zipFile.getEntry("mytesttableone.xlsx");
         try (InputStream stream = zipFile.getInputStream(XlsEntry)) {
             XLS parsed = new XLS(stream);
-            assertThat(parsed.excel.getSheetAt(0).getRow(3).getCell(0).getStringCellValue())
-                    .isEqualTo("Иван");
+            assertThat(parsed.excel.getSheetAt(0).getRow(2).getCell(1).getStringCellValue())
+                    .isEqualTo("75555555555");
         }
 
-        // Проверяем csv файл в архиве
-        ZipEntry csvEntry = zipFile.getEntry("example.csv");
+        ZipEntry csvEntry = zipFile.getEntry("mytesttabletwo.csv");
         try (InputStream stream = zipFile.getInputStream(csvEntry)) {
             CSVReader reader = new CSVReader(new InputStreamReader(stream));
             List<String[]> list = reader.readAll();
             assertThat(list)
-                    .hasSize(4)
+                    .hasSize(5)
                     .contains(
-                            new String[]{"Name", "LastName"},
-                            new String[]{"Egor", "Petrov"},
-                            new String[]{"Marina", "Sidiorova"},
-                            new String[]{"Oleg", "Minin"}
+                            new String[]{"NAME", "GENDER"},
+                            new String[]{"Ilya", "M"},
+                            new String[]{"Olga", "F"},
+                            new String[]{"Sergey", "M"},
+                            new String[]{"Grigory", "M"}
                     );
         }
 
-        //Проверяем pdf файл в архиве
-        ZipEntry pdfEntry = zipFile.getEntry("track.pdf");
+        ZipEntry pdfEntry = zipFile.getEntry("generic.pdf");
         try (InputStream stream = zipFile.getInputStream(pdfEntry)) {
             PDF parsed = new PDF(stream);
-            assertThat(parsed.text).contains("Отслеживание отправлений");
+            assertThat(parsed.text).contains("богатый опыт рамки");
         }
     }
-
 }
