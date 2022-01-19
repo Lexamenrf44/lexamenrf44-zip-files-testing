@@ -19,8 +19,8 @@ public class ZipFileTest {
     void ZipTest() throws Exception {
         ZipFile zipFile = new ZipFile("src/test/resources/ZipTestArchive.zip");
 
-        ZipEntry XlsEntry = zipFile.getEntry("mytesttableone.xlsx");
-        try (InputStream stream = zipFile.getInputStream(XlsEntry)) {
+        ZipEntry xlsEntry = zipFile.getEntry("mytesttableone.xlsx");
+        try (InputStream stream = zipFile.getInputStream(xlsEntry)) {
             XLS parsed = new XLS(stream);
             assertThat(parsed.excel.getSheetAt(0).getRow(2).getCell(1).getStringCellValue())
                     .isEqualTo("75555555555");
